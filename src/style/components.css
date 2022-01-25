@@ -1,0 +1,111 @@
+
+.btn-container {
+    margin-top: 30px;
+    display: flex;
+    flex-flow: wrap row-reverse;
+    justify-content: right;
+    gap: 20px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border-radius: 3px;
+    border: solid 1px;
+    font-size: 1.1rem;
+}
+
+.icon-btn {
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    width: 3em;
+    height: 3em;
+    padding: 0;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-btn:hover {
+    background-color: rgba(44, 62, 80, 0.09);
+    cursor: pointer;
+}
+
+.icon-btn .material-icons {
+    margin: 0;
+    padding: 0;
+}
+
+.btn.primary {
+    color: var(--light-color);
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.btn.secondary {
+    background-color: var(--light-color);
+    color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.btn.tertiary {
+    background-color: var(--light-color);
+    color: var(--main-color);
+    border-color: transparent;
+}
+
+.btn:hover {cursor: pointer}
+
+.secondary:hover, .tertiary:hover {
+    background-color: var(--main-transparent);
+}
+
+
+/*************** Forms ****************/
+
+input, textarea, select {
+    width: 100%;
+    height: 35px;
+    border: none;
+    border-bottom: solid 1px darkgrey;
+    margin-top: 10px;
+    background-color: var(--light-color);
+    font-size: 1.2em;
+    font-family: var(--main-font);
+    color: var(--text-color);
+}
+
+select {
+    border: solid 1px darkgrey;
+    border-radius: 3px;
+}
+
+.form-group {
+    margin: 30px 0;
+    display: flex;
+    flex-flow: column;
+}
+.form-group label {
+    order: -1;
+    font-size: 1.3em;
+    position: relative;
+    top: 30px;
+    transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);;
+}
+
+.spin {
+    height: 2px;
+    width: 0;
+    position: relative;
+    top: -2px;
+    background-color: var(--main-color);
+    transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.form-group *:focus {outline: none}
+.form-group:focus-within .spin {width: 100%;}
+.form-group:focus-within label,  .form-control:not(:placeholder-shown) + label{
+    top : 0;
+    left: 0;
+    font-size: 1.1em;
+}

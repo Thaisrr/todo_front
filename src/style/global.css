@@ -1,0 +1,82 @@
+:root {
+    --main-color: #ed2553;
+    --main-transparent: rgba(192, 17, 41, 0.11);
+    --text-color: #2c3e50;
+    --warn-color: #c65d41;
+    --secondary-color: #42b983;
+    --light-color: white;
+    --shadow-color: rgba(35, 42, 80, 0.15);
+    --main-font: Avenir, Helvetica, Arial, sans-serif;
+    --width: 95%;
+}
+
+* {box-sizing: border-box}
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+#app {
+    font-family: var(--main-font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--text-color);
+}
+
+h1 {
+    font-size: 3em;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.main {
+    width: var(--width);
+    margin: 30px auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr) ;
+    column-gap: 30px;
+    row-gap: 30px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.absolute {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: -70px;
+    position: fixed;
+    z-index: 2;
+    background-color: var(--shadow-color);
+}
+
+
+
+@media screen and (min-width: 700px) {
+    .grid { grid-template-columns: repeat(2, 1fr) }
+    :root {--width: 90%}
+}
+
+@media screen and (min-width: 900px) {
+    .grid { grid-template-columns: repeat(3, 1fr) }
+    :root {--width: 85%}
+}
+
+/*
+@media screen and (min-width: 1200px) {
+    .grid { grid-template-columns: repeat(3, 1fr) }
+    :root {--width: 75%}
+}
+ */

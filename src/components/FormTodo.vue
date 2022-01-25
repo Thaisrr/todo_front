@@ -1,77 +1,75 @@
 <template>
     <div>
-        <h2 v-if="!modifying">Ajouter une tâche</h2>
-        <h2 v-else>Modifier la tâche</h2>
-        <form @submit.prevent="create">
-            <div class="form-group">
-                <label for="name">Nom</label>
-                <input id="name" class="form-control" v-model="td.name"/>
-            </div>
-            <div class="form-group">
-                <label for="desc">Description</label>
-                <textarea id="desc" class="form-control" v-model="td.description"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">
-                {{ (modifying)? 'Modifier'  : 'Ajouter' }}
-            </button>
-        </form>
-        <p v-if="error" class="alert alert-danger">{{error}}</p>
+        <MyDialog @close="$emit('close')">
+            <template v-slot:content>
+                <h2 v-if="!modifying">Ajouter une tâche</h2>
+                <h2 v-else>Modifier la tâche</h2>
+                <form>
+                    <div class="form-group">
+                        <input id="name" class="form-control" placeholder="  " v-model="td.name"/>
+                        <label for="name">Nom</label>
+                        <div class="spin"></div>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="desc" class="form-control" placeholder="  " v-model="td.description"></textarea>
+                        <label for="desc">Description</label>
+                        <div class="spin"></div>
+
+                    </div>
+                </form>
+                <p v-if="error" class="alert alert-danger">{{error}}</p>
+            </template>
+            <template v-slot:buttons>
+                <button @click="create" class="btn primary">
+                    {{ (modifying)? 'Modifier'  : 'Ajouter' }}
+                </button>
+            </template>
+        </MyDialog>
     </div>
 </template>
 
-<script>
-    import axios from 'axios';
-    export default {
-        name: "FormTodo",
-        data: () => ({
-            error : ''
-        }),
-        props: {
-            api_url: String,
-            modifying: Boolean,
-            td: {
-                type: Object,
-                default: () => ({name : '', description: '', table : 'TODO'})
-            }
-        },
-        methods: {
-            create: function () {
-               if(this.td.name && this.td.description) {
-                   this.error = '';
+<script lang="ts">
+    import Todo from "@/tools/interfaces/Todo";
+    import {Prop, Vue, Component} from "vue-property-decorator";
+    import {Table} from "@/tools/interfaces/Table";
+    import MyDialog from "@/components/MyDialog.vue";
+    import TodoService from "@/services/todo.service"
 
-                   const headers = new Headers();
-                   headers.append('Content-Types', 'application/json');
-                  /* fetch(this.api_url, {
-                       method: 'POST',
-                       body: JSON.stringify(this.td),
-                       headers : headers
-                   }).then(res => res.json())
-                       .then(json => {
-                           console.warn(json); // JSON de réponse
-                           this.$emit('creation');
-                       });
-                    */
+    @Component({
+        components: {MyDialog}})
+    export default class FormTodo extends Vue{
 
-                  if(!this.modifying) {
-                      // Pour utiliser axios, il faut l'installer : npm i axios
-                      // Ne pas oublier de l'importer dans les composants qui en ont besoin
-                      axios.post(this.api_url, this.td, {
-                          headers: headers
-                      }).then(res => {
-                          console.warn(res.data); // JSON de réponse
-                          this.$emit('creation');
-                      })
-                  } else {
-                        this.$emit('modified', this.td);
-                  }
-               } else {
-                   this.error = "Veuillez remplir tous les champs du formulaire";
-               }
+        error : string = '';
+
+        @Prop({
+            default: () => ( {name: '', description: '', table: Table.TODO})
+        }) td!: Todo;
+
+
+
+        get modifying(): boolean {
+            return !!this.td && !!this.td.id ;
+        }
+
+        create()  {
+            if(this.td.name && this.td.description) {
+                this.error = '';
+               if(!this.modifying) {
+                   TodoService.create(this.td)
+                       .then(() => this.$emit('creation'))
+               } else { this.$emit('modified', this.td) }
+            } else {
+                console.warn("error");
+                this.error = "Veuillez remplir tous les champs du formulaire";
             }
         }
+
     }
 </script>
 
 <style scoped>
-
+h2 {
+    font-size: 2.3em;
+    text-align: center;
+}
 </style>
