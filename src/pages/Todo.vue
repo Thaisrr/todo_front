@@ -1,4 +1,3 @@
-import {Table} from "@/tools/interfaces/Table";
 <template>
     <div class="main">
         <div class="title">
@@ -11,34 +10,26 @@ import {Table} from "@/tools/interfaces/Table";
 
             <main class="grid" v-else-if="todos && todos.length > 1">
                 <div @dragover.prevent @drop.prevent="dropping($event)"
-
                      class="tables" v-for="tab of tables" :key="tab" :data-table="tab">
 
                     <h2>{{tab}}</h2>
                     <div class="card-container">
+                      <Card
+                              @deleted="remove"
+                              draggable="true"
+                              @dragstart.native.stop="dragStart(td, $event)"
+                              @modify="setToModify"
+                              @change-status="update"
+                              @dragover.prevent
+                              @drop.prevent.self
+                              :api_url="api_url"
+                              v-for="td of filterTodos(tab)"
+                              :key="td.id"
+                              :td="td"
+                              :id="td.id"
 
-                    <Card
-                            @deleted="remove"
-                            draggable="true"
-                            @dragstart.native.stop="dragStart(td, $event)"
-                            @modify="setToModify"
-                            @change-status="update"
-                            @dragover.prevent
-                            @drop.prevent.self
-                            :api_url="api_url"
-                            v-for="td of filterTodos(tab)"
-                            :key="td.id"
-                            :td="td"
-                            :id="td.id"
-
-                    />
+                      />
                     </div>
-
-                    <!--
-                    @dragover.native.prevent
-                            @drop.native.prevent.stop.self
-                    -->
-
                 </div>
 
             </main>
@@ -61,7 +52,7 @@ import {Table} from "@/tools/interfaces/Table";
     import FormTodo from "../components/FormTodo.vue";
     import Todo$ from "../tools/interfaces/Todo";
     import {Table, TableIterator, getTable} from "@/tools/interfaces/Table";
-    import TodoService from "@/services/todo.service";
+    import TodoService from "@/tools/services/todo.service";
 
     @Component({
         components: {FormTodo, Card},
@@ -73,12 +64,21 @@ import {Table} from "@/tools/interfaces/Table";
         todos: Todo$[] = [];
         to_modify: Todo$ = {name : '', description: '', table : Table.TODO};
 
-        mounted () {
-            TodoService.getAll().then( res  =>  this.todos = res );
+        mounted() {
+          this.getTodos();
         }
 
+        async getTodos() {
+          this.todos = await TodoService.getAll();
+        }
 
-        create() {}
+        create() {
+          this.show_dialog = false;
+          this.$store.commit('setAlertMsg', 'Tâche ajoutée');
+          this.$store.commit('setAlertLvl', 'success');
+          this.getTodos();
+
+        }
 
         remove(id: number) {
             const index = this.todos.findIndex(t => t.id === id);
@@ -127,8 +127,8 @@ import {Table} from "@/tools/interfaces/Table";
                     this.todos[index] = {...td};
                     this.setToModify();
                     this.show_dialog = false;
-                    return TodoService.getAll()
-                }).then(td => this.todos = td);
+                    this.getTodos();
+                });
         }
 
         setToModify (td? : Todo$)  {

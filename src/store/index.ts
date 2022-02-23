@@ -8,12 +8,14 @@ export default new Vuex.Store({
         alert_msg: '',
         alert_lvl: 'info',
         user: {},
-        role: ''
+        role: '',
+        isLogged: false
     },
     getters: {
         alert_msg: (st) => st.alert_msg,
         alert_lvl: (st) => st.alert_lvl,
-        user: (st) => st.user
+        user: (st) => st.user,
+        isLogged: (st) => st.isLogged
     },
     mutations: {
         setAlertMsg: (st, val) =>{
@@ -24,8 +26,14 @@ export default new Vuex.Store({
         },
         setAlertLvl: (st, val) => st.alert_lvl = val,
         setUser: (st, val) => st.user = val,
+        setIsLogged: (st, val) => st.isLogged = val
     },
     actions: {
-
+        setUser: ({commit}, val) => {
+            console.log('----Store')
+            console.log(val)
+           commit('setUser', val);
+           commit('setIsLogged', !!(val))
+        },
     }
 });

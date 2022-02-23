@@ -16,6 +16,7 @@ import Menu from "@/components/body/Menu.vue";
 import Login from "@/components/Login.vue";
 import SignIn from "@/components/SignIn.vue";
 import MyAlert from "@/components/MyAlert.vue";
+  import axios from "axios";
 
 @Component({
   components: {
@@ -29,10 +30,26 @@ export default class App extends Vue {
     show_login = false;
     show_sign = false;
 
+    constructor() {
+      super();
+      const user = localStorage.getItem('user');
+      if(user) {
+        this.$store.dispatch('setUser', JSON.parse(user));
+      }
+      this.testApi();
+    }
+
+    async testApi() {
+      const {data} = await axios.get('http://localhost:3000')
+      console.log(data);
+    }
+
   change(dialog: string) {
       this.show_login = dialog === 'sign';
       this.show_sign = dialog === 'log';
     }
+
+
 
 }
 </script>

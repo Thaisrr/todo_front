@@ -33,7 +33,7 @@
     import {Prop, Vue, Component} from "vue-property-decorator";
     import {Table} from "@/tools/interfaces/Table";
     import MyDialog from "@/components/MyDialog.vue";
-    import TodoService from "@/services/todo.service"
+    import TodoService from "@/tools/services/todo.service"
 
     @Component({
         components: {MyDialog}})

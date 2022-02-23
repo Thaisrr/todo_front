@@ -63,7 +63,7 @@
 
     import {Component, Vue} from "vue-property-decorator";
     import MyDialog from "@/components/MyDialog.vue";
-    import UserService from "../services/user.service";
+    import UserService from "../tools/services/user.service";
 
     @Component({
         components: {MyDialog}

@@ -5,12 +5,12 @@
                 <h2>Connexion</h2>
                 <form @submit.prevent>
                     <div class="form-group">
-                        <input id="email" class="form-control" placeholder="  " v-model="user.name"/>
+                        <input id="email" class="form-control" placeholder="  " v-model="user.email"/>
                         <label for="email">Email</label>
                         <div class="spin"></div>
                     </div>
                     <div class="form-group">
-                        <input id="password" class="form-control" type="password" placeholder="  " v-model="user.email"/>
+                        <input id="password" class="form-control" type="password" placeholder="  " v-model="user.password"/>
                         <label for="password">Password</label>
                         <div class="spin"></div>
                     </div>
@@ -30,19 +30,19 @@
 
     import {Component, Vue} from "vue-property-decorator";
     import MyDialog from "@/components/MyDialog.vue";
-    import UserService from "@/services/user.service";
+    import UserService from "@/tools/services/user.service";
 
     @Component({
         components: {MyDialog}
     })
     export default class Login extends Vue {
-        user = {name: '', password: ''};
+        user = {email: '', password: ''};
         error = '';
 
         login() {
             UserService.login(this.user)
                 .then(u => {
-                    this.$store.commit('setUser', u);
+                    this.$store.dispatch('setUser', u);
                     this.$store.commit('setAlertMsg', 'Bon retour parmis nous');
                     this.$emit('close');
                 }).catch(e => {

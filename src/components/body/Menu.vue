@@ -1,6 +1,6 @@
 <template>
     <div id="menu">
-        <nav>
+        <nav v-if="isLogged">
             <ul>
                 <li>
                     <router-link class="home" aria-label="Accueil" title="Accueil" :to="{name: 'home'}">
@@ -9,28 +9,37 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link class="link" aria-label="Tableau" title="Tableau" :to="{name: 'todo'}">
+                    <router-link class="link" aria-label="Tableau" title="Tableau" :to="{name: 'table'}">
                         <span aria-hidden="true" class="material-icons">view_kanban</span>
                         <span class="pin"></span>
                     </router-link>
                 </li>
                 <li>
-                    <button class="link btn" aria-label="Login" title="Login" @click="$emit('open')">
-                        <span aria-hidden="true" class="material-icons">login</span>
+                    <button class="link btn" aria-label="Login" title="Login" @click="logout">
+                        <span aria-hidden="true" class="material-icons">logout</span>
                         <span class="pin"></span>
                     </button>
                 </li>
             </ul>
         </nav>
+      <p v-else>nope</p>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
+    import userService from "@/tools/services/user.service";
 
     @Component
     export default class Menu extends Vue {
+        get isLogged() {
+          return this.$store.getters.isLogged;
+        }
 
+        logout() {
+          this.$store.dispatch('setUser', undefined);
+          userService.logout();
+        }
     }
 </script>
 
